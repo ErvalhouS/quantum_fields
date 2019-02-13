@@ -1,4 +1,5 @@
-# QuantumFields
+# QuantumFields [![Build Status](https://travis-ci.com/ErvalhouS/quantum_fields.svg?branch=master)](https://travis-ci.com/ErvalhouS/quantum_fields) [![Maintainability](https://api.codeclimate.com/v1/badges/48fd7d9c967edc9327fe/maintainability)](https://codeclimate.com/github/ErvalhouS/quantum_fields/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/48fd7d9c967edc9327fe/test_coverage)](https://codeclimate.com/github/ErvalhouS/quantum_fields/test_coverage) [![Inline docs](http://inch-ci.org/github/ErvalhouS/quantum_fields.svg?branch=master)](http://inch-ci.org/github/ErvalhouS/quantum_fields)
+
 ### Give noSQL powers to your SQL database
 QuantumFields is a gem to extend your Rails model's making them able to use virtual fields from a JSON column or a Text column serialized as a Hash. This means that you can use fields that were not explicitly declared in your schema as if they were.
 
