@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'active_record'
 require 'active_support/concern'
 require 'quantum_fields/active_record_patch'
 require 'quantum_fields/no_sqlize'
