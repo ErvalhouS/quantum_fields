@@ -6,9 +6,8 @@ ActiveRecord::PredicateBuilder.class_eval do
       bind = build_bind_attribute(attribute.name, value)
       attribute.eq(bind)
     elsif table.send('klass').respond_to?(:fields_column) && !table.send('klass').column_names.include?(attribute.name)
-      json_key = attribute.name
+      op = QuantumFields::Support.field_node(table.send('klass').arel_table[table.send('klass').fields_column], attribute.name)
       attribute.name = table.send('klass').fields_column.to_s
-      op = Arel::Nodes::InfixOperation.new('->>', table.send('klass').arel_table[table.send('klass').fields_column], Arel::Nodes.build_quoted(json_key))
       bind = build_bind_attribute(op, value)
       op.eq(bind)
     else
@@ -21,9 +20,8 @@ ActiveRecord::Relation.class_eval do
     if klass.column_names.include?(name.to_s) || !klass.respond_to?(:fields_column)
       klass.arel_attribute(name, table)
     else
-      Arel::Nodes::InfixOperation.new('->>',
-                                      klass.arel_table[klass.fields_column],
-                                      Arel::Nodes.build_quoted(name))
+      QuantumFields::Support.field_node klass.arel_table[klass.fields_column],
+                                        name
     end
   end
 end

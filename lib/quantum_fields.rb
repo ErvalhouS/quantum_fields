@@ -6,6 +6,7 @@ require 'active_support/concern'
 require 'quantum_fields/active_record_patch'
 require 'quantum_fields/no_sqlize'
 require 'quantum_fields/railtie'
+require 'quantum_fields/support'
 require 'quantum_fields/validation_injector'
 
 # A module to abstract a noSQL aproach into SQL records, using a `parameters`
