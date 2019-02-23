@@ -3,8 +3,13 @@ require 'quantum_fields'
 
 require "logger"
 
-# This connection will do for database-independent bug reports.
-ActiveRecord::Base.establish_connection(adapter: "sqlite3", database: ":memory:")
+configs = YAML.load_file('spec/database.yml')
+ActiveRecord::Base.configurations = configs
+
+db_name = ENV['QUANTUM_FIELDS_DB_ADAPTER'] || "sqlite"
+ActiveRecord::Base.establish_connection(db_name.to_sym)
+ActiveRecord::Base.default_timezone = :utc
+
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 ActiveRecord::Schema.define do
