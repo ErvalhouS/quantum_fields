@@ -2,3 +2,7 @@ sqlite:
   adapter: sqlite3
   database: ":memory:"
   timeout: 500
+postgres:
+  adapter: postgresql
+  database: quantum_fields_test
+  username: postgres

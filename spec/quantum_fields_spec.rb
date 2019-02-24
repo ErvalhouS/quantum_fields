@@ -12,6 +12,11 @@ ActiveRecord::Base.default_timezone = :utc
 
 ActiveRecord::Base.logger = Logger.new(STDOUT)
 
+puts "==>"
+puts "==> Running specs against " \
+     "#{ActiveRecord::Base.connection_config[:adapter]} adapter"
+puts "==>"
+
 ActiveRecord::Schema.define do
   create_table :my_models, force: true do |t|
     t.json :my_json_field

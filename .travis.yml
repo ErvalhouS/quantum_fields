@@ -1,8 +1,14 @@
 language: ruby
 dist: xenial
+services:
+  - postgres
 rvm:
  - 2.5.3
+env:
+  - QUANTUM_FIELDS_DB_ADAPTER="sqlite"
+  - QUANTUM_FIELDS_DB_ADAPTER="postgres"
 before_script:
+  - sh -c "if [ '$QUANTUM_FIELDS_DB_ADAPTER' = 'postgres' ]; then psql -c 'CREATE DATABASE quantum_fields_test;' -U postgres; fi"
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
   - ./cc-test-reporter before-build
