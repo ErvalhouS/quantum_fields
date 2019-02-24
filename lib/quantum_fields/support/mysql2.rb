@@ -3,7 +3,7 @@
 module QuantumFields
   module Support
     # Abstracts MySQL support for quantum_fields operations
-    module Mysql
+    module Mysql2
       class << self
         # Returns an Arel node in the context of given field and JSON key,
         # which in this context constructs as "json_extract("my_models"."my_json_field", '$.key')"
