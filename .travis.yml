@@ -1,7 +1,8 @@
 language: ruby
+cache: bundler
 dist: xenial
 services:
-  - postgres
+  - postgresql
 rvm:
  - 2.5.3
 env:
