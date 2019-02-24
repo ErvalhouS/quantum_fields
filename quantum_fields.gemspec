@@ -30,4 +30,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "sqlite3", "~> 1.3.6"
   spec.add_development_dependency "pg"
+  spec.add_development_dependency "mysql2"
 end

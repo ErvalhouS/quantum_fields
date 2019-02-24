@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'quantum_fields/support/postgresql'
-require 'quantum_fields/support/mysql'
+require 'quantum_fields/support/mysql2'
 require 'quantum_fields/support/sqlite3'
 
 module QuantumFields
