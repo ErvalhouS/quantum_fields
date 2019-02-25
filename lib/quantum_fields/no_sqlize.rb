@@ -10,12 +10,10 @@ module QuantumFields
     # into `.parameters` JSON as a key-value pair, or recovering it's value if
     # exists.
     def method_missing(meth, *args, &block)
-      if can_no_sqlize?
-        no_sqlize!(meth, *args, &block)
-      else
-        raise NotImplementedError,
-              "#{model.table_name} should have a `#{fields_column}` JSON column"
-      end
+      method_name = meth.to_s
+      super if method_name.ends_with?('!')
+      bad_config! unless can_no_sqlize?
+      no_sqlize!(method_name, *args, &block)
     rescue StandardError
       super
     end
@@ -24,10 +22,10 @@ module QuantumFields
     # the premisse that you can always assign a value to any field and recover
     # only existing fields or the ones that are in the `.parameters` JSON.
     def respond_to_missing?(method_name, include_private = false)
+      bad_config! unless can_no_sqlize?
       meth = method_name.to_s
-      can_no_sqlize? && meth.ends_with?('=') || meth.ends_with?('changed?') ||
-        try(fields_column).try(:[], meth).present? ||
-        super
+      meth.ends_with?('=') || meth.ends_with?('?') ||
+        try(fields_column).try(:[], meth).present? || super
     end
 
     # Overriding a ActiveRecord method that is used in `.create` and `.update`
@@ -58,13 +56,19 @@ module QuantumFields
     # The behavior that a noSQL method should have. It either assigns a value into
     # an attribute or retrieves it's value, depending in the method called.
     def no_sqlize!(meth, *args, &_block)
-      method_name = meth.to_s
       initialize_fields
-      if method_name.ends_with?('=')
-        assing_to(method_name.chomp('='), args.first)
+      if meth.ends_with?('=')
+        assing_to(meth.chomp('='), args.first)
+      elsif meth.ends_with?('?')
+        read_nosqlized(meth.chomp('?')).present?
       else
-        try(fields_column).try(:[], method_name)
+        read_nosqlized(meth)
       end
+    end
+
+    # Read the value of a `meth` key in :fields_column
+    def read_nosqlized(meth)
+      try(fields_column).try(:[], meth)
     end
 
     # Assings a value to a key in :fields_column which allows saving any virtual
@@ -76,12 +80,17 @@ module QuantumFields
     # Checks if requirements are met for the feature
     def can_no_sqlize?
       model.column_names.include?(fields_column.to_s) &&
-        %i[json jsonb].include?(no_sqlize_column.type)
+        %i[hstore json jsonb].include?(no_sqlize_column.type)
     end
 
     # Retrieve which column is being used to sqlize
     def no_sqlize_column
       model.columns.find { |col| col.name == fields_column.to_s }
+    end
+
+    def bad_config!
+      raise NotImplementedError,
+            "#{model.table_name} should have a `#{fields_column}` JSON column"
     end
   end
 end
