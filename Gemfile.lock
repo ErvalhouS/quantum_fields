@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    quantum_fields (0.1.1)
+    quantum_fields (0.2.0)
       rails (> 5)
 
 GEM
