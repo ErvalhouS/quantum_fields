@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'quantum_fields/exceptions'
 module QuantumFields
   # Module to enable virtual methods in moduls, it creates necessary
   # methods to simulate the behavior that any field can exist, getting
@@ -90,7 +91,7 @@ module QuantumFields
 
     # Raises an exception indicating bad configuration of the gem
     def bad_config!
-      raise NotImplementedError,
+      raise QuantumFields::NoSqlizedFieldsColumnMissing,
             "#{model.table_name} should have a `#{fields_column}` JSON column"
     end
   end
