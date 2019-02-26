@@ -88,6 +88,7 @@ module QuantumFields
       model.columns.find { |col| col.name == fields_column.to_s }
     end
 
+    # Raises an exception indicating bad configuration of the gem
     def bad_config!
       raise NotImplementedError,
             "#{model.table_name} should have a `#{fields_column}` JSON column"
