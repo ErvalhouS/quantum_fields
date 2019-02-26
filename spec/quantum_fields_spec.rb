@@ -92,11 +92,13 @@ RSpec.describe QuantumFields do
       end
 
       it 'rejects a record based on quantum_rules injected length validation' do
+        my_instance.god = 'I exist.'
         my_instance.tweet = 'An overly long tweet :) - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris porttitor, ipsum a vehicula rutrum, odio libero tristique lectus, a dapibus sed.'
         expect { my_instance.save! }.to raise_error(ActiveRecord::RecordInvalid)
       end
 
       it 'saves normally when injected length validation is met' do
+        my_instance.god = 'I exist.'
         my_instance.tweet = 'This is fine.'
         expect { my_instance.save! }.not_to raise_error(ActiveRecord::RecordInvalid)
       end
@@ -111,7 +113,8 @@ RSpec.describe QuantumFields do
         expect(VirginModel.find(virgin.id)).to eq virgin
       end
       it 'raises a NotImplementedError when model calls no_sqlize without configured fields_column' do
-        expect { AnotherModel.create(god: 'Here I am') }.to raise_error(NotImplementedError)
+        expect { AnotherModel.create(god: 'Here I am') }.to raise_error(QuantumFields::NoSqlizedFieldsColumnMissing,
+                                                                        "another_models should have a `my_json_field` JSON column")
       end
       it 'raises a NoMethodError error when model calls non-sqlizable methods that does not exist' do
         expect { my_instance.do_something! }.to raise_error(NoMethodError)
