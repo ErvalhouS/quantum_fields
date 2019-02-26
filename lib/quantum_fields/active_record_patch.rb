@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 ActiveRecord::PredicateBuilder.class_eval do
+  # Builds an binded Arel operation, injecting json operator if necessary
   def build(attribute, value)
     if table.type(attribute.name).force_equality?(value)
       bind = build_bind_attribute(attribute.name, value)
@@ -16,7 +17,10 @@ ActiveRecord::PredicateBuilder.class_eval do
   end
 end
 ActiveRecord::Relation.class_eval do
-  def arel_attribute(name) # :nodoc:
+  # Returns an Arel::Node that is used to query a field.
+  # In case that attribute is a column or if current model
+  # hasn't initialized 'no_sqlize' keeps Rails' behavior.
+  def arel_attribute(name)
     if klass.column_names.include?(name.to_s) || !klass.respond_to?(:fields_column)
       klass.arel_attribute(name, table)
     else

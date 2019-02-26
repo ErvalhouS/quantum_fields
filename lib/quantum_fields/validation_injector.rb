@@ -7,6 +7,7 @@ module QuantumFields
     extend ActiveSupport::Concern
     included do
       before_validation :map_injected_validations
+      # Maps your rules_column for defined validations
       def map_injected_validations
         send(self.class.rules_column).try(:deep_symbolize_keys)&.each do |field, rules|
           validations = rules[:validates]
@@ -14,6 +15,9 @@ module QuantumFields
         end
       end
 
+      private
+
+      # Injects validations on a given field
       def inject_validations(field, validations)
         validations.each do |method, value|
           singleton_class.validates field, method => value
