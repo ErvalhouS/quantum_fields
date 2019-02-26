@@ -16,6 +16,19 @@ module QuantumFields
   # This module contains the methods called within the Model to initialize
   # and to manage how the other methods should behave on the given context.
   module ClassMethods
+    # Method called in the model context to initialize behavior and pass
+    # configuration options into quantum_fields. You can use a custom column
+    # for your fields and a custom column for your injected validation rules.
+    # Initializing the gem behavior on default 'quantum_fields' and
+    # 'quantum_rules' columns:
+    # => no_sqlize
+    # Initializing the gem behavior on default 'quantum_rules' column and a
+    # custom fields_column 'my_json_field'
+    # => no_sqlize fields_column: :my_json_field
+    # Initializing the gem behavior on default 'quantum_fields' column and a
+    # custom rules_column 'my_json_field', affecting from where to pull
+    # injected validations:
+    # => no_sqlize rules_column: :my_json_field
     def no_sqlize(args = {})
       class_eval <<-RUBY, __FILE__, __LINE__+1
         def self.fields_column
