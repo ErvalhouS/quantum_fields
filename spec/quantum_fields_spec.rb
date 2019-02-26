@@ -82,12 +82,21 @@ RSpec.describe QuantumFields do
                     })
       end
 
-      it 'rejects a record based on quantum_rules injected validation' do
+      it 'rejects a record based on quantum_rules injected presence validation' do
         expect { my_instance.save! }.to raise_error("Validation failed: God can't be blank")
+      end
+
+      it 'saves normally when injected presence validation is met' do
         my_instance.god = 'I exist.'
         expect { my_instance.save! }.not_to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it 'rejects a record based on quantum_rules injected length validation' do
         my_instance.tweet = 'An overly long tweet :) - Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris porttitor, ipsum a vehicula rutrum, odio libero tristique lectus, a dapibus sed.'
         expect { my_instance.save! }.to raise_error(ActiveRecord::RecordInvalid)
+      end
+
+      it 'saves normally when injected length validation is met' do
         my_instance.tweet = 'This is fine.'
         expect { my_instance.save! }.not_to raise_error(ActiveRecord::RecordInvalid)
       end
